@@ -2,7 +2,6 @@ pipeline {
     agent { label 'bankapp' }
 
     environment {
-        // Define the Docker image name and tag
         DOCKER_IMAGE_NAME = 'bankapp-mini'
         DOCKER_TAG = 'latest'
     }
@@ -53,13 +52,10 @@ pipeline {
         stage('Deploying') {
             steps {
                 script {
-                    // Placeholder for your deploy step
-                    // Assuming you have a deploy function or script
                     echo "Deployment is complete."
-                    // deploy()  // Replace this with your actual deployment command
+                    // deploy()  // Add your deployment logic here
                 }
             }
         }
     }
 }
-
