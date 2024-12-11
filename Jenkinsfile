@@ -26,25 +26,13 @@ pipeline {
 
         stage("Push to DockerHub") {
             steps {
-                script {
-                    // Use DockerHub credentials for login and push
-                    withCredentials([usernamePassword(
-                        credentialsId: 'dockerhub-creds', 
-                        usernameVariable: 'DOCKER_USERNAME', 
-                        passwordVariable: 'DOCKER_PASSWORD'
-                    )]) {
-                        sh """
-                            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                            docker tag bankapp-mini:latest $DOCKER_USERNAME/bankapp-mini:latest
-                            docker push $DOCKER_USERNAME/bankapp-mini:latest
-                        """
-                    }
-                }
-                echo "Push to DockerHub is complete."
-            }
+                dockerbuild("bankapp-mini", "latest")
+                echo "Code build bhi ho gaya."
+                  }
         }
 
-        stage("Deploying") {
+        
+stage("Deploying") {
             steps {
                 // Deploy the application
                 script {
