@@ -24,7 +24,7 @@ pipeline {
 
                     // Build Docker image
                     echo "Building Docker image..."
-                    sh "sudo docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ."
+                    sh "docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ."
                 }
             }
         }
@@ -36,9 +36,11 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', 
                                                       usernameVariable: 'DOCKER_USERNAME', 
                                                       passwordVariable: 'DOCKER_PASSWORD')]) {
-                        // Log into Docker Hub
+                        // Log into Docker Hub (using the safer --password-stdin)
                         echo "Logging into Docker Hub..."
-                        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                        sh """
+                            echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin
+                        """
 
                         // Push the Docker image to Docker Hub
                         echo "Pushing Docker image to Docker Hub..."
@@ -54,7 +56,7 @@ pipeline {
                     // Placeholder for your deploy step
                     // Assuming you have a deploy function or script
                     echo "Deployment is complete."
-                    deploy()  // Replace this with your actual deployment command
+                    // deploy()  // Replace this with your actual deployment command
                 }
             }
         }
